@@ -25,9 +25,12 @@ namespace TAYAK_lab_02
             {
                 using (StreamReader sr = new StreamReader(baseAddr + fileToOpen + ".txt"))
                 {
-                    String line = sr.ReadToEnd();
-                    StateReader.addState(line);
-                    Console.WriteLine(line);
+                    String line;
+                    while ((line = sr.ReadLine()) != null)
+                    {
+                        StateReader.addState(line);
+                        Console.WriteLine(line);
+                    }
                 }
             }
             catch (Exception e)
@@ -35,7 +38,6 @@ namespace TAYAK_lab_02
                 Console.WriteLine("Ошибка при открытии файла.");
                 Console.WriteLine(e.Message);
             }
-
 
         }
     }
