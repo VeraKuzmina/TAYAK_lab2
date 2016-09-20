@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.IO;
 using System.Text;
 
@@ -20,7 +21,7 @@ namespace TAYAK_lab_02
             }
 
             try
-            { 
+            {
                 using (StreamReader sr = new StreamReader(baseAddr + fileToOpen + ".txt"))
                 {
                     String line = sr.ReadToEnd();
@@ -29,7 +30,7 @@ namespace TAYAK_lab_02
             }
             catch (Exception e)
             {
-                Console.WriteLine("The file could not be read:");
+                Console.WriteLine("Ошибка при открытии файла.");
                 Console.WriteLine(e.Message);
             }
         }
