@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.IO;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace TAYAK_lab_02
 {
@@ -25,6 +26,7 @@ namespace TAYAK_lab_02
                 using (StreamReader sr = new StreamReader(baseAddr + fileToOpen + ".txt"))
                 {
                     String line = sr.ReadToEnd();
+                    StateReader.addState(line);
                     Console.WriteLine(line);
                 }
             }
@@ -33,6 +35,8 @@ namespace TAYAK_lab_02
                 Console.WriteLine("Ошибка при открытии файла.");
                 Console.WriteLine(e.Message);
             }
+
+
         }
     }
 }
