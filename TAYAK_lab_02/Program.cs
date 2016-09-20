@@ -11,7 +11,7 @@ namespace TAYAK_lab_02
         static void Main(string[] args)
         {
             string fileToOpen;
-            string baseAddr = @"C:\Users\Вера\Source\Repos\TAYAK_lab2\TAYAK_lab_02\";
+            string baseAddr = @"C:\Users\admin\Source\Repos\TAYAK_lab2\TAYAK_lab_02\";
             Console.WriteLine("Напишите, какой файл открыть (var1, var2, var3).");
             fileToOpen = Console.ReadLine();
             if (fileToOpen != "var1" && fileToOpen != "var2" && fileToOpen != "var3")
