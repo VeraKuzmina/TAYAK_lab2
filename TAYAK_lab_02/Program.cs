@@ -38,7 +38,7 @@ namespace TAYAK_lab_02
                 Console.WriteLine("Ошибка при открытии файла.");
                 Console.WriteLine(e.Message);
             }
-
+            StateMachine sm = new StateMachine();
         }
     }
 }

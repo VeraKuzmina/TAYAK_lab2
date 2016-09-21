@@ -8,6 +8,13 @@ namespace TAYAK_lab_02
 {
     class StateMachine
     {
+        private int stateNumber;
+        private bool isStateTerminal;
 
+        public StateMachine()
+        {
+            stateNumber = 0;
+            isStateTerminal = false;
+        }
     }
 }
