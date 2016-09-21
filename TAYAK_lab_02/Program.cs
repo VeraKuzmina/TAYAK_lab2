@@ -51,6 +51,7 @@ namespace TAYAK_lab_02
             {
                 Console.WriteLine("Ошибка, запустите программу заново");
             }
+
         }
     }
 }
