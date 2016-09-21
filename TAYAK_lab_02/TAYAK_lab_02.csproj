@@ -52,6 +52,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="fsa1.txt" />
+    <Content Include="fsa2.txt" />
+    <Content Include="test1.txt" />
+    <Content Include="test2.txt" />
     <Content Include="var1.txt" />
     <Content Include="var2.txt" />
     <Content Include="var3.txt" />

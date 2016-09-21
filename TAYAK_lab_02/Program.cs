@@ -38,7 +38,19 @@ namespace TAYAK_lab_02
                 Console.WriteLine("Ошибка при открытии файла.");
                 Console.WriteLine(e.Message);
             }
-            StateMachine sm = new StateMachine();
+
+            Console.WriteLine("\nВведите строку символов для разбора:");
+            string inCharacterString;
+            inCharacterString = Console.ReadLine();
+            string outCharacterString;
+            try
+            {
+                outCharacterString = Convert.ToString(inCharacterString);
+            }
+            catch (ArgumentNullException)
+            {
+                Console.WriteLine("Ошибка, запустите программу заново");
+            }
         }
     }
 }
