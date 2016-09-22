@@ -38,14 +38,20 @@ namespace TAYAK_lab_02
                 Console.WriteLine("Ошибка при открытии файла.");
                 Console.WriteLine(e.Message);
             }
-
+            ///////
             foreach (var key in StateReader.stateDic.Keys)
                 Console.WriteLine("\tKey: {0} | Value: {1}", key, StateReader.stateDic[key]);
+            //////
+
+            StateMachine sm = new StateMachine();
 
             Console.WriteLine("\nВведите строку символов для разбора:");
-            string inCharacterString;
-            inCharacterString = Console.ReadLine();
+            string inCharacterString = Console.ReadLine();
+            sm.analyzeString(inCharacterString);
+
             string outCharacterString;
+
+
             try
             {
                 outCharacterString = Convert.ToString(inCharacterString);
