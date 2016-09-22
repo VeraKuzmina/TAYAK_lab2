@@ -16,5 +16,21 @@ namespace TAYAK_lab_02
             stateNumber = 0;
             isStateTerminal = false;
         }
+
+        public void readCharacter(char inChar)
+        {
+            try
+            {
+                stateNumber = StateReader.stateDic[Tuple.Create<int, char>(stateNumber, inChar)].Item2;
+                if (StateReader.stateDic[Tuple.Create<int, char>(stateNumber, inChar)].Item1 == 'f' || StateReader.stateDic[Tuple.Create<int, char>(stateNumber, inChar)].Item1 == 'F')
+                    isStateTerminal = true;
+                
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Что-то пошло не так.");
+                throw;
+            }
+        }
     }
 }

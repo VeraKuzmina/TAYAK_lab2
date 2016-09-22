@@ -39,6 +39,9 @@ namespace TAYAK_lab_02
                 Console.WriteLine(e.Message);
             }
 
+            foreach (var key in StateReader.stateDic.Keys)
+                Console.WriteLine("\tKey: {0} | Value: {1}", key, StateReader.stateDic[key]);
+
             Console.WriteLine("\nВведите строку символов для разбора:");
             string inCharacterString;
             inCharacterString = Console.ReadLine();
