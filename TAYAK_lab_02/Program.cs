@@ -49,18 +49,6 @@ namespace TAYAK_lab_02
             string inCharacterString = Console.ReadLine();
             sm.analyzeString(inCharacterString);
 
-            string outCharacterString;
-
-
-            try
-            {
-                outCharacterString = Convert.ToString(inCharacterString);
-            }
-            catch (ArgumentNullException)
-            {
-                Console.WriteLine("Ошибка, запустите программу заново");
-            }
-
         }
     }
 }
