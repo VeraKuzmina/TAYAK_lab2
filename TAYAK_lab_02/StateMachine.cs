@@ -28,8 +28,8 @@ namespace TAYAK_lab_02
             }
             catch (Exception e)
             {
-                Console.WriteLine("Что-то пошло не так.");
-                throw;
+                Console.WriteLine("Нет перехода.");
+                isStateTerminal = true;
             }
         }
 
