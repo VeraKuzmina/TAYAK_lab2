@@ -26,9 +26,10 @@ namespace TAYAK_lab_02
                 using (StreamReader sr = new StreamReader(baseAddr + fileToOpen + ".txt"))
                 {
                     String line;
+                    StateReader s = new StateReader();
                     while ((line = sr.ReadLine()) != null)
                     {
-                        StateReader.addState(line);
+                        s.addState(line);
                         Console.WriteLine(line);
                     }
                 }
@@ -40,7 +41,7 @@ namespace TAYAK_lab_02
             }
             ///////
             foreach (var key in StateReader.stateDic.Keys)
-                Console.WriteLine("\tKey: {0} | Value: {1}", key, StateReader.stateDic[key]);
+                Console.WriteLine("\tKey: {0} | Value: {1}"/*, key, StateReader.stateDic[key]*/);
             //////
 
             StateMachine sm = new StateMachine();
