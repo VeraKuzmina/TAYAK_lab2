@@ -9,27 +9,33 @@ namespace TAYAK_lab_02
     class StateMachine
     {
         private int stateNumber;
-        private bool isStateTerminal;
+        private bool isStateTerminal, flag;
+        private char stateCharacter;
 
         public StateMachine()
         {
             stateNumber = 0;
+            stateCharacter = 'q';
             isStateTerminal = false;
+            flag = false;
         }
 
-        private void readCharacter(char inChar)
+        private void readCharacter(int i, string inString, char inChar)
         {
             try
             {
-                int new_stateNumber = StateReader.stateDic[Tuple.Create<int, char>(stateNumber, inChar)].Item2;
-                if (StateReader.stateDic[Tuple.Create<int, char>(stateNumber, inChar)].Item1 == 'f' || StateReader.stateDic[Tuple.Create<int, char>(stateNumber, inChar)].Item1 == 'F')
-                    isStateTerminal = true;
+                int new_stateNumber = StateReader.stateDic[Tuple.Create<char, int, char>(stateCharacter, stateNumber, inChar)].Item2;
+                char new_stateCharacter = StateReader.stateDic[Tuple.Create<char, int, char>(stateCharacter, stateNumber, inChar)].Item1;
+                if (i == inString.Length - 1)
+                    if (StateReader.stateDic[Tuple.Create<char, int, char>(stateCharacter, stateNumber, inChar)].Item1 == 'f' || StateReader.stateDic[Tuple.Create<char, int, char>(stateCharacter, stateNumber, inChar)].Item1 == 'F')
+                        isStateTerminal = true;
                 stateNumber = new_stateNumber;
+                stateCharacter = new_stateCharacter;
             }
             catch (Exception e)
             {
                 Console.WriteLine("Нет перехода.");
-                isStateTerminal = true;
+                flag = true;
             }
         }
 
@@ -37,8 +43,8 @@ namespace TAYAK_lab_02
         {
             int i = 0;
             for (i = 0; i < inString.Length && !isStateTerminal; ++i)
-                readCharacter(inString[i]);
-            if (i == inString.Length && isStateTerminal)
+                readCharacter(i, inString, inString[i]);
+            if (i == inString.Length && isStateTerminal && !flag)
                 Console.WriteLine("Строку возможно разобрать.");
             else if (i < inString.Length && isStateTerminal)
                 Console.WriteLine("Автомат разобрал не всю строку.");
