@@ -10,7 +10,7 @@ namespace TAYAK_lab_02
     class StateReader
     {
         //Ключ словаря - кортеж <номер состояния, символ>; значение -- кортеж <символ состояния, номер состояния>
-        public static Dictionary<Tuple<char, int, char>, Tuple<char, int>> stateDic = new Dictionary<Tuple<char, int, char>, Tuple<char, int>>();
+        public static Dictionary<Tuple<char, int, char>, List<Tuple<char, int>>> stateDic = new Dictionary<Tuple<char, int, char>, List<Tuple<char, int>>>();
 
         public static void addState(string input)
         {
@@ -25,7 +25,9 @@ namespace TAYAK_lab_02
             int indexOfComma = input.IndexOf(',');
             int curState  = int.Parse(input.Substring(1, indexOfComma - 1 ) );
             int nextState = int.Parse(input.Substring(indexOfComma + 4));
-            stateDic.Add(new Tuple<char, int, char>(input[indexOfComma - 2], curState, input[indexOfComma + 1]), new Tuple<char, int>(input[indexOfComma + 3], nextState));
+            List<Tuple<char, int>> list = new List<Tuple<char, int>>();
+            list.Add(new Tuple<char, int>(input[indexOfComma + 3], nextState));
+            stateDic.Add(new Tuple<char, int, char>(input[indexOfComma - 2], curState, input[indexOfComma + 1]), list);
         }
 
     }
