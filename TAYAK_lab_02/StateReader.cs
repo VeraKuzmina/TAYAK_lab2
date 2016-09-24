@@ -9,61 +9,49 @@ namespace TAYAK_lab_02
 {
     class StateReader
     {
-        private int curState;
-        private int nextState;
-        private char inState ;
-        private char inChar;
-        private bool flag;
-
+        private bool flag, flag2;
+        public static bool isDetermine;
         public StateReader()
         {
-            curState = 0;
-            nextState = 0;
-            inState = 'q';
-            inChar = 'q';
             flag = false;
+            isDetermine = false;
         }
+
         //Ключ словаря - кортеж <номер состояния, символ>; значение -- кортеж <символ состояния, номер состояния>
         public static Dictionary<Tuple<char, int, char>, List<Tuple<char, int>>> stateDic = new Dictionary<Tuple<char, int, char>, List<Tuple<char, int>>>();
 
         public void addState(string input)
         {
-            /*foreach (var elem in expr)
-            {
-                if (expr[0][0] != 'q' && expr[0][0] != 'Q')
-                    throw new FormatException("Строка начинается не с \"q\"");
-            }*/
-            List <Tuple<char, int>> list = new List<Tuple<char, int>>();
+            List<Tuple<char, int>> list = new List<Tuple<char, int>>();
             int indexOfComma = input.IndexOf(',');
-            int newCurState = int.Parse(input.Substring(1, indexOfComma - 1));
-            char newInChar = input[indexOfComma + 1];
-            char newInState = input[indexOfComma - 2];
+            int curState = int.Parse(input.Substring(1, indexOfComma - 1));
+            char inChar = input[indexOfComma + 1];
+            char inState = input[0];
             if (!flag)
             {
                 list.Add(new Tuple<char, int>(input[indexOfComma + 3], int.Parse(input.Substring(indexOfComma + 4))));
                 stateDic.Add(new Tuple<char, int, char>(inState, curState, inChar), list);
                 flag = true;
             }
-            foreach (var key in stateDic.Keys)
+            else
             {
-                
-                if (newInState == inState && newCurState == curState && newInChar == inChar)
+                var keys = stateDic.Keys;
+                flag2 = true;
+                foreach (var key in keys)
                 {
-                    stateDic[Tuple.Create<char, int, char>(inState, curState, inChar)].Add(new Tuple<char, int>(input[indexOfComma + 3], int.Parse(input.Substring(indexOfComma + 4))));
-                    curState = newCurState;
-                    nextState = int.Parse(input.Substring(indexOfComma + 4));
-                    inState = newInState;
-                    inChar = newInChar;
+                    if (inState == key.Item1 && curState == key.Item2 && inChar == key.Item3)
+                    {
+                        stateDic[Tuple.Create<char, int, char>(key.Item1, key.Item2, key.Item3)].Add(new Tuple<char, int>(input[indexOfComma + 3], int.Parse(input.Substring(indexOfComma + 4))));
+                        flag2 = false;
+                        isDetermine = true;
+                    }
                 }
-                else
-                {
-                    curState = newCurState;
-                    inState = newInState;
-                    inChar = newInChar;
-                    list.Add(new Tuple<char, int>(input[indexOfComma + 3], int.Parse(input.Substring(indexOfComma + 4))));
-                    stateDic.Add(new Tuple<char, int, char>(inState, curState, inChar), list);
-                }   
-            }   
+            }
+            if (flag2)
+            {
+                list.Add(new Tuple<char, int>(input[indexOfComma + 3], int.Parse(input.Substring(indexOfComma + 4))));
+                stateDic.Add(new Tuple<char, int, char>(inState, curState, inChar), list);
+            }
         }
     }
 }
