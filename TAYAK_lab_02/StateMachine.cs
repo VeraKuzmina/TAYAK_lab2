@@ -52,10 +52,12 @@ namespace TAYAK_lab_02 {
                     List<Tuple<char, int>> list = StateReader.stateDic[key];
                     int i = 0;
                     string str = "";
+                    List<char> arrayState = new List<char>();
                     bool f = false;
                     foreach (var l in list) {
                         if (StateReader.stateDic[Tuple.Create<char, int, char>(key.Item1, key.Item2, key.Item3)][i].Item1 == 'f')
                             f = true;
+                        arrayState.Add(StateReader.stateDic[Tuple.Create<char, int, char>(key.Item1, key.Item2, key.Item3)][i].Item1);
                         str = str +  Convert.ToString(list[i].Item2);
                         i++;
                     }
@@ -66,6 +68,25 @@ namespace TAYAK_lab_02 {
                     else inState = 'Q';
                     
                     StateReader.stateDic[Tuple.Create<char, int, char>(key.Item1, key.Item2, key.Item3)].Add(new Tuple<char, int>(inState, int.Parse(str)));
+
+                    List<Tuple<char, int>> newState = new List<Tuple<char, int>>();
+                    int k = 0;
+                    foreach (var s in str)
+                    {
+                        Console.Write(s);
+                        var keys2 = StateReader.stateDic.Keys;
+                        int t = 0;
+                        foreach (var key2 in keys2)
+                        {
+                            //   if (StateReader.stateDic[Tuple.Create<char, int, char>(key2.Item1, key2.Item2, key2.Item3)][t].Item1 == arrayState[k] &&
+                            //     StateReader.stateDic[Tuple.Create<char, int, char>(key2.Item1, key2.Item2, key2.Item3)][t].Item2 == Convert.ToInt32(s))
+                            // {
+                            // }
+                            t++;
+                        }
+                        k++;
+                    }
+                    Console.WriteLine();
                 }
             }
         }

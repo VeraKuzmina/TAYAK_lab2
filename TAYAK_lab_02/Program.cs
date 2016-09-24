@@ -46,7 +46,7 @@ namespace TAYAK_lab_02 {
                 sm.determine();
             }
 
-            Console.WriteLine("\t** Автомат детерминирован. **");
+            Console.WriteLine("\n\t** Автомат детерминирован. **");
             foreach (var key in StateReader.stateDic.Keys)
                 Console.WriteLine("\tKey: {0} | Value: {1}", key, Program.outputArray(StateReader.stateDic[key]));
 
