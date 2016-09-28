@@ -17,11 +17,9 @@ namespace TAYAK_lab_02 {
             return str;
         }
         static void Main(string[] args) {
-            string fileToOpen;
-            string baseAddr = @"C:\Users\admin\Source\Repos\TAYAK_lab2\TAYAK_lab_02\";
-
+            string baseAddr = @"C:\Users\Вера\Source\Repos\TAYAK_lab2\TAYAK_lab_02\";
             Console.Write("Напишите, какой файл открыть: ");
-            fileToOpen = Console.ReadLine();
+            string fileToOpen = Console.ReadLine();
             try {
                 using (StreamReader sr = new StreamReader(baseAddr + fileToOpen + ".txt")) {
                     String line;
@@ -39,6 +37,15 @@ namespace TAYAK_lab_02 {
             }
 
             StateMachine sm = new StateMachine();
+
+            if(StateReader.hasEpsilon)
+            {
+                Console.WriteLine("\t** Автомат содержит эпсилон-переходы. **");
+                foreach (var key in StateReader.stateDic.Keys)
+                    Console.WriteLine("\tKey: {0} | Value: {1}", key, Program.outputArray(StateReader.stateDic[key]));
+                sm.killAllEpsilon();
+            }
+
             if (StateReader.isDetermine) {
                 Console.WriteLine("\t** Автомат недетерминирован. **");
                 foreach (var key in StateReader.stateDic.Keys)
