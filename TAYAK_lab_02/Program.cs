@@ -10,20 +10,22 @@ namespace TAYAK_lab_02 {
         private static string outputArray(List<Tuple<char, int>> list) {
             string str = "";
             int i = 0;
-            foreach (var l in list) {
-                str = str + list[i].Item1 + Convert.ToString(list[i].Item2) + " ";
-                i++;
-            }
+            for(i = 0; i !=list.Count; i++)
+                str += list[i].Item1 + Convert.ToString(list[i].Item2) + " ";
             return str;
         }
         static void Main(string[] args) {
+            StateReader s = new StateReader();
+            StateMachine sm = new StateMachine();
+
             string baseAddr = @"C:\Users\admin\Source\Repos\TAYAK_lab2\TAYAK_lab_02\";
             Console.Write("Напишите, какой файл открыть: ");
             string fileToOpen = Console.ReadLine();
+
             try {
                 using (StreamReader sr = new StreamReader(baseAddr + fileToOpen + ".txt")) {
                     String line;
-                    StateReader s = new StateReader();
+                    
                     while ((line = sr.ReadLine()) != null) {
                         Console.WriteLine(line);
                         s.addState(line);
@@ -36,8 +38,6 @@ namespace TAYAK_lab_02 {
                 Environment.Exit(0);
             }
 
-            StateMachine sm = new StateMachine();
-
             if(StateReader.hasEpsilon)
             {
                 Console.WriteLine("\t** Автомат содержит эпсилон-переходы. **");
@@ -46,7 +46,7 @@ namespace TAYAK_lab_02 {
                 sm.killAllEpsilon();
             }
 
-            if (StateReader.isDetermine) {
+            if (StateReader.isNotDetermined) {
                 Console.WriteLine("\t** Автомат недетерминирован. **");
                 foreach (var key in StateReader.stateDic.Keys)
                     Console.WriteLine("\tKey: {0} | Value: {1}", key, Program.outputArray(StateReader.stateDic[key]));
