@@ -235,24 +235,18 @@ namespace TAYAK_lab_02
                         {
                             for (int k = 0; k < arrayState[j][y].Length; k++)
                             {
-                                Console.WriteLine("***   " + arrayState[j][y].Substring(k) + "\t" + str[j][y] + "\t" + list[i].Item1 + "\t" + list[i].Item2 + "   ***");
                                 if (arrayState[j][y].Substring(k).Length >= list[i].Item1.Length)
                                 {
                                     if (arrayState[j][y].Substring(k).Contains(list[i].Item1))
                                     {
                                         index = arrayState[j][y].Substring(k).IndexOf(list[i].Item1);
-                                        Console.WriteLine(index);
                                         if (index >= 0)
                                         {
                                             if (str[j][y].ToString().Substring(k).Contains(list[i].Item2.ToString()))
                                             {
                                                 index2 = str[j][y].ToString().Substring(k).IndexOf(list[i].Item2.ToString());
-                                                Console.WriteLine(index2);
                                                 if (index == index2)
-                                                {
                                                     addflag = false;
-                                                    Console.WriteLine(index + "\t" + index2);
-                                                }
                                             }
                                         }
                                     }
@@ -282,32 +276,9 @@ namespace TAYAK_lab_02
                                 state = arrayState[j][r];
                                 arrayState[j][r] = arrayState[j][r+1];
                                 arrayState[j][r + 1] = state;
-                            //    arrayState[j] = arrayState[j].Substring(0, r) + arrayState[j][r + 1].ToString() + arrayState[j][r].ToString() + arrayState[j].Substring(r + 2);
-                                flag = false;
+                               flag = false;
                             }
                     }
-
-                    //Console.WriteLine("WWW");
-                    //flag = false;
-                    //while (!flag)
-                    //{
-                    //    flag = false;
-                    //    for (int r = 0; r < arrayState[j].Count - 1; r++)
-                    //    {
-                    //        if (Convert.ToInt32(arrayState[j][r][0]) > Convert.ToInt32(arrayState[j][r + 1][0]))
-                    //        {
-                    //            number = str[j][r];
-                    //            str[j][r] = str[j][r + 1];
-                    //            str[j][r + 1] = number;
-                    //            state = arrayState[j][r];
-                    //            arrayState[j][r] = arrayState[j][r + 1];
-                    //            arrayState[j][r + 1] = state;
-                    //            // arrayState[j] = arrayState[j].Substring(0, r) + arrayState[j][r + 1].ToString() + arrayState[j][r].ToString() + arrayState[j].Substring(r + 2);
-                    //            flag = true;
-                    //        }
-                    //        flag = true;
-                    //    }
-                    //}
 
                     if (str[j][0] == 0)
                     {
@@ -317,7 +288,6 @@ namespace TAYAK_lab_02
                         state = arrayState[j][0];
                         arrayState[j][0] = arrayState[j][1];
                         arrayState[j][1] = state;
-                    //    arrayState[j] = arrayState[j][1].ToString() + arrayState[j][0].ToString() + arrayState[j].Substring(2);
                     }
 
                     for (int q = 0; q < i; q++)
@@ -350,11 +320,6 @@ namespace TAYAK_lab_02
                     {
                         if ((key2.Item1.Equals(arrayState[y][k].ToString())) && (key2.Item2 == str[y][k]))
                         {
-                            //Console.WriteLine("*****   " + key2.Item1 + "   *****");
-                            //if ((StateReader.stateDic[Tuple.Create<string, int, char>(key2.Item1, key2.Item2, key2.Item3)][0].Item1.Equals(key2.Item1)) &&
-                            //    (StateReader.stateDic[Tuple.Create<string, int, char>(key2.Item1, key2.Item2, key2.Item3)][0].Item2 == key2.Item2))
-                            //    newState.Add(new Tuple<string, int, char>(state2, int.Parse(numb), key2.Item3));
-                            //else
                                 newState.Add(new Tuple<string, int, char>(StateReader.stateDic[Tuple.Create<string, int, char>(key2.Item1, key2.Item2, key2.Item3)][0].Item1,
                                 StateReader.stateDic[Tuple.Create<string, int, char>(key2.Item1, key2.Item2, key2.Item3)][0].Item2, key2.Item3));
                         }
@@ -368,55 +333,15 @@ namespace TAYAK_lab_02
                     if (!(StateReader.stateDic.ContainsKey(new Tuple<string, int, char>(state2, int.Parse(numb), newState[l].Item3))))
                     {
                         StateReader.stateDic.Add(new Tuple<string, int, char>(state2, int.Parse(numb), newState[l].Item3), list);
-                        Console.Write("\nNEW  ");
-                        Console.WriteLine(arrayState[y] + "\t" + int.Parse(numb) + "\t" + newState[l].Item3 + "t:  "
-                            + newState[l]);
                     }
                     else
                     {
-                        Console.Write(arrayState[y] + "\t" + int.Parse(numb) + "\t" + newState[l].Item3 + "  ");
-                        Console.Write(StateReader.stateDic[Tuple.Create<string, int, char>(state2, int.Parse(numb), newState[l].Item3)][0] + "   ");
-                        Console.WriteLine(newState[l]);
-                        //      );
                         if (!((StateReader.stateDic[Tuple.Create<string, int, char>(state2, int.Parse(numb), newState[l].Item3)][0].Item1 == newState[l].Item1)
                             && (StateReader.stateDic[Tuple.Create<string, int, char>(state2, int.Parse(numb), newState[l].Item3)][0].Item2 == newState[l].Item2)))
                             StateReader.stateDic[Tuple.Create<string, int, char>(state2, int.Parse(numb), newState[l].Item3)]
                             .Add(Tuple.Create<string, int>(newState[l].Item1, newState[l].Item2));
                     }
                 }
-
-                //numb = "";
-                //for (int l = 0; l < str[y].Count; l++)
-                //    numb = numb + str[y][l].ToString();
-
-                //List<Tuple<string, int, char>> newState3 = new List<Tuple<string, int, char>>();
-                //for (int k = 0; k < str[y].Count; k++)
-                //{
-                //    var keys2 = StateReader.stateDic.Keys;
-                //    foreach (var key2 in keys2)
-                //    {
-                //        if ((key2.Item1.Equals(arrayState[y][k].ToString())) && (key2.Item2 == str[y][k]))
-                //        {
-                //            Console.WriteLine("*****   " + key2.Item1 + "\t" + arrayState[y][k].ToString() + "   *****");
-                //            if ((StateReader.stateDic[Tuple.Create<string, int, char>(key2.Item1, key2.Item2, key2.Item3)][0].Item1.Equals(key2.Item1)) &&
-                //                (StateReader.stateDic[Tuple.Create<string, int, char>(key2.Item1, key2.Item2, key2.Item3)][0].Item2 == key2.Item2))
-                //                newState3.Add(new Tuple<string, int, char>(state2, int.Parse(numb), key2.Item3));
-                //        }
-                //    }
-                //}
-                //for (int l = 0; l < newState3.Count(); l++)
-                //{
-                //    List<Tuple<string, int>> list = new List<Tuple<string, int>>();
-                //    list.Add(new Tuple<string, int>(newState3[l].Item1, newState3[l].Item2));
-                //    if (StateReader.stateDic.ContainsKey(new Tuple<string, int, char>(state2, int.Parse(numb), newState3[l].Item3)))
-                //    {
-                //        StateReader.stateDic[(new Tuple<string, int, char>(state2, int.Parse(numb), newState3[l].Item3))].RemoveAt(0);
-                //        StateReader.stateDic[Tuple.Create<string, int, char>(state2, int.Parse(numb), newState3[l].Item3)]
-                //            .Add(Tuple.Create<string, int>(newState3[l].Item1, newState3[l].Item2));
-                //    }
-                //    for (int u = 0; u < newState3.Count; u++)
-                //        Console.WriteLine(newState3[u]);
-                //}
             }
         }
     }
