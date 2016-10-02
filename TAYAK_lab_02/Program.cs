@@ -7,10 +7,9 @@ using System.Text.RegularExpressions;
 
 namespace TAYAK_lab_02 {
     class Program {
-        private static string outputArray(List<Tuple<char, int>> list) {
+        private static string outputArray(List<Tuple<string, int>> list) {
             string str = "";
-            int i = 0;
-            for(i = 0; i !=list.Count; i++)
+            for(int i = 0; i !=list.Count; i++)
                 str += list[i].Item1 + Convert.ToString(list[i].Item2) + " ";
             return str;
         }
@@ -50,7 +49,7 @@ namespace TAYAK_lab_02 {
                 Console.WriteLine("\t** Автомат недетерминирован. **");
                 foreach (var key in StateReader.stateDic.Keys)
                     Console.WriteLine("\tKey: {0} | Value: {1}", key, Program.outputArray(StateReader.stateDic[key]));
-                sm.determine();
+                sm.allDetermine();
             }
 
             Console.WriteLine("\n\t** Автомат детерминирован. **");

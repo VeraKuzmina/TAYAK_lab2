@@ -9,7 +9,7 @@ namespace TAYAK_lab_02 {
     class StateReader {
         public static bool isNotDetermined;
         public static bool hasEpsilon;
-        public static Dictionary<Tuple<char, int, char>, List<Tuple<char, int>>> stateDic = new Dictionary<Tuple<char, int, char>, List<Tuple<char, int>>>();
+        public static Dictionary<Tuple<string, int, char>, List<Tuple<string, int>>> stateDic = new Dictionary<Tuple<string, int, char>, List<Tuple<string, int>>>();
 
         public StateReader() {
             isNotDetermined = false;
@@ -18,24 +18,28 @@ namespace TAYAK_lab_02 {
         
         public void addState(string input) {
 
-            List<Tuple<char, int>> list = new List<Tuple<char, int>>();
+            List<Tuple<string, int>> list = new List<Tuple<string, int>>();
             int indexOfComma = input.IndexOf(',');
             char inChar = input[indexOfComma + 1];
-            char inState = input[0];
+            string inState = input[0].ToString();
             int curState = int.Parse(input.Substring(1, indexOfComma - 1));
             int  nextState = int.Parse(input.Substring(indexOfComma + 4));
+
+            if ((inState.Equals(input[indexOfComma + 3].ToString())) && (curState == nextState) && (inChar == '~'))
+            {
+                Console.WriteLine("не учитываем");
+                return;
+            }
 
             if (inChar == '~') hasEpsilon = true;
 
             var keys = stateDic.Keys;
-            if (keys.Count == 0 || !(stateDic.ContainsKey(Tuple.Create<char,int,char>(inState, curState, inChar) )) )
-            {
-                list.Add(Tuple.Create<char, int>(input[indexOfComma + 3], nextState));
-                stateDic.Add(Tuple.Create<char, int, char>(inState, curState, inChar), list);
+            if (keys.Count == 0 || !(stateDic.ContainsKey(Tuple.Create<string,int,char>(inState, curState, inChar) )) ) {
+                list.Add(Tuple.Create<string, int>(input[indexOfComma + 3].ToString(), nextState));
+                stateDic.Add(Tuple.Create<string, int, char>(inState, curState, inChar), list);
             }
-            else
-            {
-                stateDic[Tuple.Create<char, int, char>(inState, curState, inChar)].Add(Tuple.Create<char, int>(input[indexOfComma + 3], nextState));
+            else {
+                stateDic[Tuple.Create<string, int, char>(inState, curState, inChar)].Add(Tuple.Create<string, int>(input[indexOfComma + 3].ToString(), nextState));
                 isNotDetermined = true;
             }
                

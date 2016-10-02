@@ -14,7 +14,7 @@ q7, =q7
 q7,==q10
 q7,e=q8
 q8,e=q8
-q8,==q10
+q8,==q10D:\MPI\Labs\TAYAK_lab_02\TAYAK_lab_02\fsa1.txt
 q8, =q9
 q9, =q10
 q9,==q10
