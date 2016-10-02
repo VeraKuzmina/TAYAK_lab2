@@ -7,7 +7,7 @@ using System.Text.RegularExpressions;
 
 namespace TAYAK_lab_02 {
     class Program {
-        private static string outputArray(List<Tuple<string, int>> list) {
+        public static string outputArray(List<Tuple<string, int>> list) {
             string str = "";
             for(int i = 0; i !=list.Count; i++)
                 str += list[i].Item1 + Convert.ToString(list[i].Item2) + " ";

@@ -27,8 +27,7 @@ namespace TAYAK_lab_02
             {
                 int new_stateNumber = StateReader.stateDic[Tuple.Create<string, int, char>(stateCharacter, stateNumber, inChar)][0].Item2;
                 string new_stateCharacter = StateReader.stateDic[Tuple.Create<string, int, char>(stateCharacter, stateNumber, inChar)][0].Item1.ToString();
-                if ((i == inString.Length - 1) && (StateReader.stateDic[Tuple.Create<string, int, char>(stateCharacter, stateNumber, inChar)][0].Item1.Equals("f")
-                        || StateReader.stateDic[Tuple.Create<string, int, char>(stateCharacter, stateNumber, inChar)][0].Item1.Equals("F")))
+                if ((i == inString.Length - 1) && (StateReader.stateDic[Tuple.Create<string, int, char>(stateCharacter, stateNumber, inChar)][0].Item1.Contains("f")))
                     isStateTerminal = true;
                 if ((i == inString.Length - 1) && (StateReader.stateDic[Tuple.Create<string, int, char>(stateCharacter, stateNumber, inChar)][0].Item1.Equals("q"))
                         && (StateReader.stateDic[Tuple.Create<string, int, char>(stateCharacter, stateNumber, inChar)][0].Item2 == 0) && flag)
@@ -56,7 +55,7 @@ namespace TAYAK_lab_02
 
         public void killAllEpsilon()
         {
-            startsWithEpsilon();
+            startsWithEpsilonAll();
             bool hasEpsilon = false;
             var keys = StateReader.stateDic.Keys;
             while (!hasEpsilon)
@@ -65,6 +64,19 @@ namespace TAYAK_lab_02
                 foreach (var key in keys)
                     if (key.Item3 == '~') hasEpsilon = false;
                 if (!hasEpsilon) killEpsilon();
+            }
+        }
+
+        public void startsWithEpsilonAll()
+        {
+            bool hasStartsWithEpsilon = false;
+            var keys = StateReader.stateDic.Keys;
+            while (!hasStartsWithEpsilon)
+            {
+                hasStartsWithEpsilon = true;
+                foreach (var key in keys)
+                    if ((key.Item1 == "q") && (key.Item2 == 0) && (key.Item3 == '~')) hasStartsWithEpsilon = false;
+                if (!hasStartsWithEpsilon) startsWithEpsilon();
             }
         }
 
@@ -83,7 +95,6 @@ namespace TAYAK_lab_02
                             StateReader.stateDic[Tuple.Create<string, int, char>(key.Item1, key.Item2, key.Item3)][j].Item2));
                         if (StateReader.stateDic[Tuple.Create<string, int, char>(key.Item1, key.Item2, key.Item3)][j].Item1.Equals("f"))
                             flag = true;
-                        Console.WriteLine(StateReader.stateDic[Tuple.Create<string, int, char>(key.Item1, key.Item2, key.Item3)][j]);
                     }
                 }
             }
@@ -107,20 +118,22 @@ namespace TAYAK_lab_02
                     }
                 }
             }
-
-            for (int l = 0; l < newState.Count(); l++)
-            {
-                List<Tuple<string, int>> list = new List<Tuple<string, int>>();
-                list.Add(new Tuple<string, int>(newState[l].Item1, newState[l].Item2));
-                if (!(StateReader.stateDic.ContainsKey(new Tuple<string, int, char>("q", 0, newState[l].Item3))))
-                    StateReader.stateDic.Add(new Tuple<string, int, char>("q", 0, newState[l].Item3), list);
-                else
-                    StateReader.stateDic[Tuple.Create<string, int, char>("q", 0, newState[l].Item3)]
-                        .Add(Tuple.Create<string, int>(newState[l].Item1, newState[l].Item2));
-            }
             if (StateReader.stateDic.ContainsKey(new Tuple<string, int, char>("q", 0, '~')))
                 StateReader.stateDic.Remove(Tuple.Create<string, int, char>("q", 0, '~'));
-
+            
+            for (int l = 0; l < newState.Count(); l++)
+            {
+                List<Tuple<string, int>> list2 = new List<Tuple<string, int>>();
+                list2.Add(new Tuple<string, int>(newState[l].Item1, newState[l].Item2));
+                    if (!(StateReader.stateDic.ContainsKey(new Tuple<string, int, char>("q", 0, newState[l].Item3))))
+                    StateReader.stateDic.Add(new Tuple<string, int, char>("q", 0, newState[l].Item3), list2);
+                else
+                {
+                    if (!(StateReader.stateDic[Tuple.Create<string, int, char>("q", 0, newState[l].Item3)].Contains(list2[0])))
+                        StateReader.stateDic[Tuple.Create<string, int, char>("q", 0, newState[l].Item3)]
+                        .Add(Tuple.Create<string, int>(newState[l].Item1, newState[l].Item2));
+                }
+            }
             StateMachine.isNotDetermined();
         }
 
@@ -169,8 +182,8 @@ namespace TAYAK_lab_02
                     }
                 }
             }
-            StateMachine.isNotDetermined();
             StateReader.stateDic.Remove(Tuple.Create<string, int, char>(isState[0].Item1.ToString(), isState[0].Item2, '~'));
+            StateMachine.isNotDetermined();
         }
         public static void isNotDetermined()
         {
@@ -204,55 +217,107 @@ namespace TAYAK_lab_02
             var keys = StateReader.stateDic.Keys;
 
             List<List<int>> str = new List<List<int>>();
-            List<string> arrayState = new List<string>();
-            int j = 0, w = 0;
-            foreach (var key in keys) {
-                if (StateReader.stateDic[Tuple.Create<string, int, char>(key.Item1, key.Item2, key.Item3)].Count > 1) {
+            List<List<string>> arrayState = new List<List<string>>();
+            int j = 0;
+            foreach (var key in keys)
+            {
+                if (StateReader.stateDic[Tuple.Create<string, int, char>(key.Item1, key.Item2, key.Item3)].Count > 1)
+                {
                     List<Tuple<string, int>> list = StateReader.stateDic[key];
-                    List<int> list2 = new List<int>();
-                    bool isStateF = false;
-                    arrayState.Add("");
                     str.Add(new List<int>());
+                    arrayState.Add(new List<string>());
                     int i = 0;
-                    for (i = 0; i != list.Count; i++)  {
-                        arrayState[j] = arrayState[j] + list[i].Item1;
-                        str[j].Add(list[i].Item2);
+                    int index, index2;
+                    bool addflag = true;
+                    for (i = 0; i != list.Count; i++)
+                    {
+                        for (int y = 0; y < arrayState[j].Count; y++)
+                        {
+                            for (int k = 0; k < arrayState[j][y].Length; k++)
+                            {
+                                Console.WriteLine("***   " + arrayState[j][y].Substring(k) + "\t" + str[j][y] + "\t" + list[i].Item1 + "\t" + list[i].Item2 + "   ***");
+                                if (arrayState[j][y].Substring(k).Length >= list[i].Item1.Length)
+                                {
+                                    if (arrayState[j][y].Substring(k).Contains(list[i].Item1))
+                                    {
+                                        index = arrayState[j][y].Substring(k).IndexOf(list[i].Item1);
+                                        Console.WriteLine(index);
+                                        if (index >= 0)
+                                        {
+                                            if (str[j][y].ToString().Substring(k).Contains(list[i].Item2.ToString()))
+                                            {
+                                                index2 = str[j][y].ToString().Substring(k).IndexOf(list[i].Item2.ToString());
+                                                Console.WriteLine(index2);
+                                                if (index == index2)
+                                                {
+                                                    addflag = false;
+                                                    Console.WriteLine(index + "\t" + index2);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            
+                        }
+                        if (addflag)
+                        {
+                            arrayState[j].Add(list[i].Item1);
+                            str[j].Add(list[i].Item2);
+                        }
                     }
 
                     int number;
+                    string state;
                     bool flag = false;
-                    while (!flag) {
+                    while (!flag)
+                    {
                         flag = true;
                         for (int r = 0; r < str[j].Count - 1; r++)
-                            if (str[j][r] > str[j][r + 1]) {
-                                number = str[j][r];
-                                str[j][r] = str[j][r + 1];
-                                str[j][r + 1] = number;
-                                arrayState[j] = arrayState[j].Substring(0, r) + arrayState[j][r + 1].ToString() + arrayState[j][r].ToString() + arrayState[j].Substring(r + 2);
-                                flag = false;
-                            }
-                    }
-                    flag = false;
-                    while (!flag) {
-                        flag = false;
-                        for (int r = 0; r < arrayState[j].Length - 1; r++)
-                        {
-                            if (Convert.ToInt32(arrayState[j][r]) > Convert.ToInt32(arrayState[j][r + 1]))
+                            if (str[j][r] > str[j][r + 1])
                             {
                                 number = str[j][r];
                                 str[j][r] = str[j][r + 1];
                                 str[j][r + 1] = number;
-                                arrayState[j] = arrayState[j].Substring(0, r) + arrayState[j][r + 1].ToString() + arrayState[j][r].ToString() + arrayState[j].Substring(r + 2);
-                                flag = true;
+                                state = arrayState[j][r];
+                                arrayState[j][r] = arrayState[j][r+1];
+                                arrayState[j][r + 1] = state;
+                            //    arrayState[j] = arrayState[j].Substring(0, r) + arrayState[j][r + 1].ToString() + arrayState[j][r].ToString() + arrayState[j].Substring(r + 2);
+                                flag = false;
                             }
-                            flag = true;
-                        }
                     }
-                    if (str[j][0] == 0) {
+
+                    //Console.WriteLine("WWW");
+                    //flag = false;
+                    //while (!flag)
+                    //{
+                    //    flag = false;
+                    //    for (int r = 0; r < arrayState[j].Count - 1; r++)
+                    //    {
+                    //        if (Convert.ToInt32(arrayState[j][r][0]) > Convert.ToInt32(arrayState[j][r + 1][0]))
+                    //        {
+                    //            number = str[j][r];
+                    //            str[j][r] = str[j][r + 1];
+                    //            str[j][r + 1] = number;
+                    //            state = arrayState[j][r];
+                    //            arrayState[j][r] = arrayState[j][r + 1];
+                    //            arrayState[j][r + 1] = state;
+                    //            // arrayState[j] = arrayState[j].Substring(0, r) + arrayState[j][r + 1].ToString() + arrayState[j][r].ToString() + arrayState[j].Substring(r + 2);
+                    //            flag = true;
+                    //        }
+                    //        flag = true;
+                    //    }
+                    //}
+
+                    if (str[j][0] == 0)
+                    {
                         number = str[j][0];
                         str[j][0] = str[j][1];
                         str[j][1] = number;
-                        arrayState[j] = arrayState[j][1].ToString() + arrayState[j][0].ToString() + arrayState[j].Substring(2);
+                        state = arrayState[j][0];
+                        arrayState[j][0] = arrayState[j][1];
+                        arrayState[j][1] = state;
+                    //    arrayState[j] = arrayState[j][1].ToString() + arrayState[j][0].ToString() + arrayState[j].Substring(2);
                     }
 
                     for (int q = 0; q < i; q++)
@@ -260,14 +325,23 @@ namespace TAYAK_lab_02
                     string numb = "";
                     for (int l = 0; l < str[j].Count; l++)
                         numb = numb + str[j][l].ToString();
-                    StateReader.stateDic[Tuple.Create<string, int, char>(key.Item1, key.Item2, key.Item3)].Add(new Tuple<string, int>(arrayState[j], int.Parse(numb)));
-                    if (isStateF) w++;
+                    string state2 = "";
+                    for (int l = 0; l < arrayState[j].Count; l++)
+                        state2 = state2 + arrayState[j][l].ToString();
+                    StateReader.stateDic[Tuple.Create<string, int, char>(key.Item1, key.Item2, key.Item3)].Add(new Tuple<string, int>(state2, int.Parse(numb)));
                     j++;
                 }
             }
 
             for (int y = 0; y < str.Count; y++)
             {
+                string numb = "";
+                for (int l = 0; l < str[y].Count; l++)
+                    numb = numb + str[y][l].ToString();
+                string state2 = "";
+                for (int l = 0; l < arrayState[y].Count; l++)
+                    state2 = state2 + arrayState[y][l].ToString();
+
                 List<Tuple<string, int, char>> newState = new List<Tuple<string, int, char>>();
                 for (int k = 0; k < str[y].Count; k++)
                 {
@@ -275,20 +349,25 @@ namespace TAYAK_lab_02
                     foreach (var key2 in keys2)
                     {
                         if ((key2.Item1.Equals(arrayState[y][k].ToString())) && (key2.Item2 == str[y][k]))
-                            newState.Add(new Tuple<string, int, char>(StateReader.stateDic[Tuple.Create<string, int, char>(key2.Item1, key2.Item2, key2.Item3)][0].Item1,
+                        {
+                            //Console.WriteLine("*****   " + key2.Item1 + "   *****");
+                            //if ((StateReader.stateDic[Tuple.Create<string, int, char>(key2.Item1, key2.Item2, key2.Item3)][0].Item1.Equals(key2.Item1)) &&
+                            //    (StateReader.stateDic[Tuple.Create<string, int, char>(key2.Item1, key2.Item2, key2.Item3)][0].Item2 == key2.Item2))
+                            //    newState.Add(new Tuple<string, int, char>(state2, int.Parse(numb), key2.Item3));
+                            //else
+                                newState.Add(new Tuple<string, int, char>(StateReader.stateDic[Tuple.Create<string, int, char>(key2.Item1, key2.Item2, key2.Item3)][0].Item1,
                                 StateReader.stateDic[Tuple.Create<string, int, char>(key2.Item1, key2.Item2, key2.Item3)][0].Item2, key2.Item3));
+                        }
                     }
                 }
-                string numb = "";
-                for (int l = 0; l < str[y].Count; l++)
-                    numb = numb + str[y][l].ToString();
+
                 for (int l = 0; l < newState.Count(); l++)
                 {
                     List<Tuple<string, int>> list = new List<Tuple<string, int>>();
                     list.Add(new Tuple<string, int>(newState[l].Item1, newState[l].Item2));
-                    if (!(StateReader.stateDic.ContainsKey(new Tuple<string, int, char>(arrayState[y], int.Parse(numb), newState[l].Item3))))
+                    if (!(StateReader.stateDic.ContainsKey(new Tuple<string, int, char>(state2, int.Parse(numb), newState[l].Item3))))
                     {
-                        StateReader.stateDic.Add(new Tuple<string, int, char>(arrayState[y], int.Parse(numb), newState[l].Item3), list);
+                        StateReader.stateDic.Add(new Tuple<string, int, char>(state2, int.Parse(numb), newState[l].Item3), list);
                         Console.Write("\nNEW  ");
                         Console.WriteLine(arrayState[y] + "\t" + int.Parse(numb) + "\t" + newState[l].Item3 + "t:  "
                             + newState[l]);
@@ -296,15 +375,48 @@ namespace TAYAK_lab_02
                     else
                     {
                         Console.Write(arrayState[y] + "\t" + int.Parse(numb) + "\t" + newState[l].Item3 + "  ");
-                        Console.Write(StateReader.stateDic[Tuple.Create<string, int, char>(arrayState[y], int.Parse(numb), newState[l].Item3)][0] + "   ");
+                        Console.Write(StateReader.stateDic[Tuple.Create<string, int, char>(state2, int.Parse(numb), newState[l].Item3)][0] + "   ");
                         Console.WriteLine(newState[l]);
                         //      );
-                        if (!((StateReader.stateDic[Tuple.Create<string, int, char>(arrayState[y], int.Parse(numb), newState[l].Item3)][0].Item1 == newState[l].Item1)
-                            && (StateReader.stateDic[Tuple.Create<string, int, char>(arrayState[y], int.Parse(numb), newState[l].Item3)][0].Item2 == newState[l].Item2)))
-                            StateReader.stateDic[Tuple.Create<string, int, char>(arrayState[y], int.Parse(numb), newState[l].Item3)]
+                        if (!((StateReader.stateDic[Tuple.Create<string, int, char>(state2, int.Parse(numb), newState[l].Item3)][0].Item1 == newState[l].Item1)
+                            && (StateReader.stateDic[Tuple.Create<string, int, char>(state2, int.Parse(numb), newState[l].Item3)][0].Item2 == newState[l].Item2)))
+                            StateReader.stateDic[Tuple.Create<string, int, char>(state2, int.Parse(numb), newState[l].Item3)]
                             .Add(Tuple.Create<string, int>(newState[l].Item1, newState[l].Item2));
                     }
                 }
+
+                //numb = "";
+                //for (int l = 0; l < str[y].Count; l++)
+                //    numb = numb + str[y][l].ToString();
+
+                //List<Tuple<string, int, char>> newState3 = new List<Tuple<string, int, char>>();
+                //for (int k = 0; k < str[y].Count; k++)
+                //{
+                //    var keys2 = StateReader.stateDic.Keys;
+                //    foreach (var key2 in keys2)
+                //    {
+                //        if ((key2.Item1.Equals(arrayState[y][k].ToString())) && (key2.Item2 == str[y][k]))
+                //        {
+                //            Console.WriteLine("*****   " + key2.Item1 + "\t" + arrayState[y][k].ToString() + "   *****");
+                //            if ((StateReader.stateDic[Tuple.Create<string, int, char>(key2.Item1, key2.Item2, key2.Item3)][0].Item1.Equals(key2.Item1)) &&
+                //                (StateReader.stateDic[Tuple.Create<string, int, char>(key2.Item1, key2.Item2, key2.Item3)][0].Item2 == key2.Item2))
+                //                newState3.Add(new Tuple<string, int, char>(state2, int.Parse(numb), key2.Item3));
+                //        }
+                //    }
+                //}
+                //for (int l = 0; l < newState3.Count(); l++)
+                //{
+                //    List<Tuple<string, int>> list = new List<Tuple<string, int>>();
+                //    list.Add(new Tuple<string, int>(newState3[l].Item1, newState3[l].Item2));
+                //    if (StateReader.stateDic.ContainsKey(new Tuple<string, int, char>(state2, int.Parse(numb), newState3[l].Item3)))
+                //    {
+                //        StateReader.stateDic[(new Tuple<string, int, char>(state2, int.Parse(numb), newState3[l].Item3))].RemoveAt(0);
+                //        StateReader.stateDic[Tuple.Create<string, int, char>(state2, int.Parse(numb), newState3[l].Item3)]
+                //            .Add(Tuple.Create<string, int>(newState3[l].Item1, newState3[l].Item2));
+                //    }
+                //    for (int u = 0; u < newState3.Count; u++)
+                //        Console.WriteLine(newState3[u]);
+                //}
             }
         }
     }
