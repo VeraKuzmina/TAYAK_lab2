@@ -17,7 +17,7 @@ namespace TAYAK_lab_02 {
             StateReader s = new StateReader();
             StateMachine sm = new StateMachine();
 
-            string baseAddr = @"C:\Users\admin\Source\Repos\TAYAK_lab2\TAYAK_lab_02\";
+            string baseAddr = @"C:\Users\Вера\Source\Repos\TAYAK_lab2\TAYAK_lab_02\";
             Console.Write("Напишите, какой файл открыть: ");
             string fileToOpen = Console.ReadLine();
 

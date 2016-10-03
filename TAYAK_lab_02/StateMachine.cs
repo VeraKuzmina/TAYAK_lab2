@@ -49,6 +49,7 @@ namespace TAYAK_lab_02
                 readCharacter(i, inString, inString[i]);
             if (i == inString.Length && isStateTerminal && !isNotTransition)
                 Console.WriteLine("Строку возможно разобрать.");
+
             else
                 Console.WriteLine("Автомат не сможет разобрать строку.");
         }
@@ -94,7 +95,10 @@ namespace TAYAK_lab_02
                         initialState.Add(new Tuple<string, int>(StateReader.stateDic[Tuple.Create<string, int, char>(key.Item1, key.Item2, key.Item3)][j].Item1,
                             StateReader.stateDic[Tuple.Create<string, int, char>(key.Item1, key.Item2, key.Item3)][j].Item2));
                         if (StateReader.stateDic[Tuple.Create<string, int, char>(key.Item1, key.Item2, key.Item3)][j].Item1.Equals("f"))
+                        {
                             flag = true;
+                            isStateTerminal = true;
+                        }
                     }
                 }
             }
@@ -134,7 +138,16 @@ namespace TAYAK_lab_02
                         .Add(Tuple.Create<string, int>(newState[l].Item1, newState[l].Item2));
                 }
             }
-            StateMachine.isNotDetermined();
+
+            for (int l = 0; l < newState.Count(); l++)
+            {
+                if ((newState[l].Item1.Equals("q")) && (newState[l].Item2 == 0) && (newState[l].Item3 == '~'))
+                {
+                    int index = StateReader.stateDic[Tuple.Create<string, int, char>("q", 0, newState[l].Item3)].IndexOf(new Tuple<string, int>("q", 0));
+                    StateReader.stateDic[Tuple.Create<string, int, char>("q", 0, newState[l].Item3)].RemoveAt(index);
+                }
+            }
+                StateMachine.isNotDetermined();
         }
 
         public static void killEpsilon()
@@ -328,6 +341,11 @@ namespace TAYAK_lab_02
 
                 for (int l = 0; l < newState.Count(); l++)
                 {
+                    //if ((state2.Equals(newState[l].Item1)) && (int.Parse(numb) == newState[l].Item2) && (newState[l].Item3 == '~') )
+                    //{
+
+                    //    break;
+                    //}
                     List<Tuple<string, int>> list = new List<Tuple<string, int>>();
                     list.Add(new Tuple<string, int>(newState[l].Item1, newState[l].Item2));
                     if (!(StateReader.stateDic.ContainsKey(new Tuple<string, int, char>(state2, int.Parse(numb), newState[l].Item3))))
