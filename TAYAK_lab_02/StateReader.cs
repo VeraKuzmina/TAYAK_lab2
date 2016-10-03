@@ -19,11 +19,12 @@ namespace TAYAK_lab_02 {
         public void addState(string input) {
 
             List<Tuple<string, int>> list = new List<Tuple<string, int>>();
-            int indexOfComma = input.IndexOf(',');
-            char inChar = input[indexOfComma + 1];
-            string inState = input[0].ToString();
-            int curState = int.Parse(input.Substring(1, indexOfComma - 1));
-            int  nextState = int.Parse(input.Substring(indexOfComma + 4));
+            var indexOfComma = input.IndexOf(',');
+            var inChar       = input[indexOfComma + 1];
+            var inState      = input[0].ToString();
+            var curState     = int.Parse(input.Substring(1, indexOfComma - 1));
+            var nextState    = int.Parse(input.Substring(indexOfComma + 4));
+            var currentKey   = Tuple.Create<string, int, char>(inState, curState, inChar);
 
             if ((inState.Equals(input[indexOfComma + 3].ToString())) && (curState == nextState) && (inChar == '~'))
             {
@@ -34,12 +35,12 @@ namespace TAYAK_lab_02 {
             if (inChar == '~') hasEpsilon = true;
 
             var keys = stateDic.Keys;
-            if (keys.Count == 0 || !(stateDic.ContainsKey(Tuple.Create<string,int,char>(inState, curState, inChar) )) ) {
+            if (keys.Count == 0 || !( stateDic.ContainsKey(currentKey) ) ) {
                 list.Add(Tuple.Create<string, int>(input[indexOfComma + 3].ToString(), nextState));
-                stateDic.Add(Tuple.Create<string, int, char>(inState, curState, inChar), list);
+                stateDic.Add(currentKey, list);
             }
             else {
-                stateDic[Tuple.Create<string, int, char>(inState, curState, inChar)].Add(Tuple.Create<string, int>(input[indexOfComma + 3].ToString(), nextState));
+                stateDic[currentKey].Add(Tuple.Create<string, int>(input[indexOfComma + 3].ToString(), nextState));
                 isNotDetermined = true;
             }
                
